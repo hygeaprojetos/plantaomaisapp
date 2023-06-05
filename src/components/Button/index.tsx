@@ -1,18 +1,24 @@
-import React from 'react'
+import React from "react";
 
-import {
-    BoxButton,
-    TextButton
-} from './styles'
+import { BoxButtonDisabled, BoxButton, TextButton } from "./styles";
 
-interface PropsInput {
-    title?: string
+interface PropsButton {
+  title?: string;
+  type: "disabled";
 }
 
-export function Button({title}: PropsInput) {
+export function Button({ title, type }: PropsButton) {
   return (
-    <BoxButton>
-        <TextButton>{title}</TextButton>
-    </BoxButton>
-  )
+    <>
+      {type == "disabled" ? (
+        <BoxButtonDisabled disabled={true}>
+          <TextButton>{title}</TextButton>
+        </BoxButtonDisabled>
+      ) : (
+        <BoxButton>
+          <TextButton>{title}</TextButton>
+        </BoxButton>
+      )}
+    </>
+  );
 }
