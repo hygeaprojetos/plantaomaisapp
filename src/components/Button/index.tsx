@@ -4,7 +4,7 @@ import { BoxButtonDisabled, BoxButton, TextButton } from "./styles";
 
 interface PropsButton {
   title?: string;
-  type: "disabled";
+  type?: "disabled";
 }
 
 export function Button({ title, type }: PropsButton) {
