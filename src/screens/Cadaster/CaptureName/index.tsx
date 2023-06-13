@@ -12,7 +12,7 @@ import {
 import { Button } from "../../../components/Button";
 
 export function CapturedName() {
-  
+
   const [name, setName] = useState<any>("");
 
   return (

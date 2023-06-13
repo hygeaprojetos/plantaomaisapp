@@ -14,6 +14,7 @@
     "@types/styled-components-react-native": "^5.2.1",
     "components": "^0.1.0",
     "expo": "~48.0.18",
+    "expo-camera": "~13.2.1",
     "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
     "react": "18.2.0",
