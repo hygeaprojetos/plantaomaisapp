@@ -11,6 +11,7 @@ import { FormCadaster } from "../screens/Cadaster/FormCadaster";
 import { CameraPhoto } from "../screens/Cadaster/ChoosePhoto/Camera";
 import { CheckListMessage } from "../screens/CheckListMessage";
 import { PaymentLink } from "../screens/Cadaster/PaymentLink";
+import { InternalLink } from "../screens/Cadaster/InternalLink";
 
 const Auth = createNativeStackNavigator();
 
@@ -57,10 +58,15 @@ export function AuthRoutes() {
         name="CheckListMessage"
         component={CheckListMessage}
       /> */}
-      <Auth.Screen
+      {/* <Auth.Screen
         options={{ headerShown: false }}
         name="PaymentLink"
         component={PaymentLink}
+      /> */}
+      <Auth.Screen
+        options={{ headerShown: false }}
+        name="InternalLink"
+        component={InternalLink}
       />
     </Auth.Navigator>
   );

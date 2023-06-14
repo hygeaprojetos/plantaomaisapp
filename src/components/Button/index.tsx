@@ -7,7 +7,7 @@ import { TouchableOpacityProps } from 'react-native'
 interface PropsButton extends TouchableOpacityProps {
   title?: string;
   type?: "disabled";
-  colorBackground: "white";
+  colorBackground?: "white";
 }
 
 export function Button({ title, type,colorBackground, ...rest }: PropsButton) {
