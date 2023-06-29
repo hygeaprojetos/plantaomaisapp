@@ -21,7 +21,7 @@ export const Description = styled.Text`
     text-align: center;
     margin-bottom: 70px;
 ` 
-export const ContainerAccountText = styled.Text`
+export const ContainerAccountText = styled.TouchableOpacity`
     margin-top: 41px;
     flex-direction: row;
 `

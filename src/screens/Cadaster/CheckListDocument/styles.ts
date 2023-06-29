@@ -13,6 +13,16 @@ export const SubTitle = styled.Text`
     color: #52665A;
     font-size: 32px;
 `
+export const ContainerAlignHeader = styled.View``
+export const ContainerDescription = styled.View`
+   width: 100%;
+` 
+export const Description = styled.Text`
+    text-align: center;
+    font-size: 17px;
+    color: #5C6660;
+    margin-bottom: 30px;
+`
 export const ContainerHeader = styled.View`
     flex-direction: row;
     align-items: center;
@@ -25,15 +35,7 @@ export const PhotoUser = styled.View`
     background-color: #ccc;
     border-radius: 35px;
 `
-export const Banner = styled.Image` `
-export const ContainerBanner = styled.View`
-    align-items: center;
-    padding-right: 10%;
-    padding-left: 10%;
-`
-export const ContainerFormInput = styled.View`
-    padding-right: 10%;
-    padding-left: 10%;
+export const ContainerListener = styled.ScrollView`
+    padding: 0px 10%;
     margin-bottom: 10px;
-    margin-top: 10px;
 `

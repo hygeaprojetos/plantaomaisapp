@@ -1,6 +1,7 @@
 import styled from "styled-components/native";
 
 export const Container = styled.View`
+    flex: 1;
     align-items: center;
     background-color: #fff;
 `
@@ -27,6 +28,6 @@ export const TextInput = styled.TextInput`
     color: #5C6660;
 `
 export const ContainerButton = styled.View`
-    width: 60%;
+    width: 75%;
     margin-top: 20px;
 `

@@ -31,9 +31,36 @@ export const ContainerBanner = styled.View`
     padding-right: 10%;
     padding-left: 10%;
 `
-export const ContainerFormInput = styled.View`
-    padding-right: 10%;
-    padding-left: 10%;
+export const ContainerListAttch = styled.View`
+    padding: 0 8%;
+    flex-direction: row;
+    justify-content: space-between;
+`
+export const Box = styled.TouchableOpacity`
+    /* background-color: #234A6B; */
+    width: 156px;
+    height: 140px;
+    border-radius: 16px;
+    border: 1px solid #234A6B;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px;
+`
+export const BoxIcon = styled.View`
+    background-color: #F4F4F4;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    align-items: center;
+    justify-content: center;
     margin-bottom: 10px;
-    margin-top: 10px;
+`
+export const Icon = styled.Image``
+export const TitleAnexo = styled.Text`
+    font-size: 15px;
+    color: #234A6B;
+`
+export const SubTitleAnexo = styled.Text`
+    color: #9CA4AB;
+    font-size: 12px;
 `

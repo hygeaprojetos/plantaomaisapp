@@ -11,7 +11,11 @@ import {
 
 import { Button } from "../../../components/Button";
 
+import { useNavigation } from "@react-navigation/native";
+
 export function CapturedName() {
+
+  const navigation = useNavigation()
 
   const [name, setName] = useState<any>("");
 
@@ -29,7 +33,9 @@ export function CapturedName() {
       <BoxInput></BoxInput>
 
       <ContainerButton>
-        <Button title="Confirmar" type={name <= 0 ? "disabled" : null} />
+        <Button
+        onPress={() => navigation.navigate("ConfirmName")}
+        title="Confirmar" type={name <= 0 ? "disabled" : null} />
       </ContainerButton>
     </Container>
   );

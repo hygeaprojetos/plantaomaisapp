@@ -12,7 +12,12 @@ import logo from '../../../assets/logobg.png'
 
 import {Button} from '../../../components/Button'
 
+import { useNavigation } from '@react-navigation/native'
+
 export function ConfirmName() {
+  
+  const navigation = useNavigation()
+  
   return (
     <Container>
 
@@ -25,7 +30,7 @@ export function ConfirmName() {
       </Description>
 
       <ContainerButton>
-      <Button title="Vamos lá"/>
+      <Button onPress={() => navigation.navigate("ChoosenPhoto")} title="Vamos lá"/>
       </ContainerButton>
     </Container>
   )

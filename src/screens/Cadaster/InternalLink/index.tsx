@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Container, Title, Description, TextAlert } from "./styles";
 
 import { Button } from "../../../components/Button";
 import { ContainerButton } from "../CaptureName/styles";
+import { Modal } from "react-native";
+import { ModalPopUp } from "./components/Modal";
 
 export function InternalLink() {
+
+  const [popUpVisible, setPopUpVisible] = useState(false);
+
   return (
     <Container>
       <Title>Sobre o RPA</Title>
@@ -28,8 +33,20 @@ export function InternalLink() {
       </TextAlert>
 
       <ContainerButton>
-        <Button title="Quero ser RPA" />
+        <Button
+        onPress={() => setPopUpVisible(true)}
+        title="Quero ser RPA" />
       </ContainerButton>
+
+      <Modal transparent={true} visible={popUpVisible} animationType="slide">
+        <ModalPopUp
+          title="Tudo certo"
+          description="Vamos fazer o registro facil
+          e precisamos da liberação da sua câmera."
+          textButton="Liberar Acesso"
+          onClosed={() => alert("ok")}
+        />
+      </Modal>
     </Container>
   );
 }

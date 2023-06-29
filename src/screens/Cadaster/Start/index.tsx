@@ -6,7 +6,12 @@ import { AntDesign } from "@expo/vector-icons";
 
 import logoBg from "../../../assets/logobg.png";
 
+import { useNavigation } from "@react-navigation/native";
+
 export function Start() {
+ 
+  const navigation = useNavigation()
+
   return (
     <Container>
       <Title>
@@ -21,7 +26,7 @@ export function Start() {
         Candidatar-se a plantões, trocas,{"\n"}doações de plantões e escalas.
       </Description>
 
-      <Play>
+      <Play onPress={() => navigation.navigate("CapturedName")}>
         <AntDesign name="right" size={24} color="#fff" />
       </Play>
       

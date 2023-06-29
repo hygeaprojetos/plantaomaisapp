@@ -26,8 +26,9 @@ export function ChoosenPhoto() {
 
   const openCamera = () => {
     if (visibleBorder === "photo") {
-      navigation.navigate("CameraPhoto");
-    } else alert("escolher foto da galeria....!");
+      // navigation.navigate("CameraPhoto");
+      alert('em teste')
+    } else navigation.navigate("FormCadaster")
   };
 
   return (
