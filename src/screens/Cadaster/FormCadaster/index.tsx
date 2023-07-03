@@ -18,6 +18,7 @@ import banner from "../../../assets/banner.png";
 import { InputCadaster } from "../../../components/Input/InputCadaster";
 import { Button } from "../../../components/Button";
 import { AuthContext } from "../../../context/AuthContext";
+import { InputSelected } from "../../../components/Input/InputSelected";
 
 export function FormCadaster() {
   const navigation = useNavigation();
@@ -46,9 +47,9 @@ export function FormCadaster() {
   const [location, setLocation] = useState("");
 
   async function handleNext() {
-    /* navigation.navigate("VerificationCode"); */
+    navigation.navigate("CheckListMessage");
 
-    let data: any = {
+    /* let data: any = {
       name,
       email,
       phone,
@@ -69,7 +70,7 @@ export function FormCadaster() {
       location,
     };
 
-    await signUp(data);
+    await signUp(data); */
   }
 
   return (
@@ -92,85 +93,107 @@ export function FormCadaster() {
             value={name}
             onChangeText={setName}
             title="Nome completo*"
+            placeholder="Seu Nome"
           />
           <InputCadaster
             value={email}
             onChangeText={setEmail}
             title="E-mail*"
+            placeholder="Seu melhor e-amail"
           />
           <InputCadaster
             value={phone}
             onChangeText={setPhone}
             title="Telefone*"
+            placeholder="(00) 0 0000-000"
           />
-          <InputCadaster value={rg} onChangeText={setRg} title="RG*" />
+          <InputCadaster
+            value={rg}
+            onChangeText={setRg}
+            title="RG*"
+            placeholder="Digite seu RG"
+          />
           <InputCadaster
             value={numberIndentify}
             onChangeText={setNumberIndentify}
             title="Número de identificação*"
+            placeholder="Digite seu CPF"
           />
           <InputCadaster
             value={date}
             onChangeText={setDate}
             title="Data de nascimento*"
+            placeholder="10/10/1999"
           />
           <InputCadaster
             value={naturalidade}
             onChangeText={setNaturalidade}
             title="Naturalidade*"
+            placeholder="Naturalidade"
           />
-          <InputCadaster
-            value={estadoCivil}
-            onChangeText={setEstadoCivil}
+          <InputSelected
             title="Estado civil*"
+            textSelect="Selecione seu estado civil"
           />
-          <InputCadaster value={sexo} onChangeText={setSexo} title="Sexo*" />
-          <InputCadaster value={cep} onChangeText={setCep} title="CEP*" />
+          <InputSelected title="Sexo*" textSelect="Selecione o sexo" />
+          <InputCadaster
+            value={cep}
+            onChangeText={setCep}
+            title="CEP*"
+            placeholder="CEP"
+          />
           <InputCadaster
             value={endereco}
             onChangeText={setEndereco}
             title="Endereço*"
+            placeholder="Endereço"
           />
           <InputCadaster
             value={number}
             onChangeText={setNumber}
             title="Número*"
+            placeholder="Endereço"
           />
+          <InputSelected title="Estado*" textSelect="Estado" />
           <InputCadaster
-            value={state}
-            onChangeText={setState}
-            title="Estado*"
+            value={city}
+            onChangeText={setCity}
+            title="Cidade*"
+            placeholder="Cidade"
           />
-          <InputCadaster value={city} onChangeText={setCity} title="Cidade*" />
           <InputCadaster
             value={numberCrm}
             onChangeText={setNumberCrm}
             title="Número CRM*"
+            placeholder="Numero CRM"
           />
-          <InputCadaster
-            value={stateCrm}
-            onChangeText={setStateCrm}
-            title="Estado CRM*"
-          />
+          <InputSelected title="Estado CRM*" textSelect="Estado CRM" />
           <InputCadaster
             value={emissaoCrm}
             onChangeText={setEmissaoCrm}
             title="Emissão CRM*"
+            placeholder="10/12/2019"
           />
           <InputCadaster
             value={cnes}
             onChangeText={setCnes}
             title="Número CNES*"
+            placeholder="Número CNES"
           />
-          <InputCadaster
-            value={curso}
-            onChangeText={setCurso}
+          <InputSelected
+            title="Especialidade*"
+            textSelect="Selecione a especialidade"
+          />
+          <InputSelected title="Curso*" textSelect="Selecione o curso" />
+          <InputSelected
             title="É funcionário público concursado?*"
+            textSelect="Selecione"
           />
           <InputCadaster
             value={location}
             onChangeText={setLocation}
             title="Qual local atua?*"
+            placeholder="Nome do local"
           />
 
           <Button title="Avançar" onPress={handleNext} />

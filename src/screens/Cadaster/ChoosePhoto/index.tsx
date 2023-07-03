@@ -28,7 +28,7 @@ export function ChoosenPhoto() {
     if (visibleBorder === "photo") {
       // navigation.navigate("CameraPhoto");
       alert('em teste')
-    } else navigation.navigate("FormCadaster")
+    } else navigation.navigate("FormPreCadaster")
   };
 
   return (

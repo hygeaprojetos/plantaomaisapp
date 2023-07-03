@@ -17,11 +17,29 @@ import {
 
 import { Button } from "../../../components/Button";
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, RouteProp } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackParamsList } from "../../../routes/auth.routes";
+
+/* type RouteDetailParams = {
+  VerificationCode: {
+    nameDoctor: string;
+    email: string;
+    phone: string;
+    numeroIdentificacao: string;
+    numeroCrm: string;
+    estadocrm: string;
+  };
+};
+
+export type DoctorRouteProp = RouteProp<RouteDetailParams, "VerificationCode">; */
 
 export function VerificationCode() {
 
-  const navigation = useNavigation()
+  const navigation = useNavigation/* <NativeStackNavigationProp<StackParamsList>> */();
+
+  /* const route = useRoute<DoctorRouteProp>();
+  const nameDoctor = route; */
 
   return (
     <Container>
@@ -64,9 +82,13 @@ export function VerificationCode() {
         </ButtonText>
         </ContainerTextAlert>
       <ContainerButton>
-      <Button onPress={() => navigation.navigate("CheckListMessage")} title="Verificar"/>
+      <Button onPress={() => navigation.navigate("FormCadaster")} title="Verificar"/>
       </ContainerButton>
 
     </Container>
   );
 }
+function useRoute<T>() {
+  throw new Error("Function not implemented.");
+}
+

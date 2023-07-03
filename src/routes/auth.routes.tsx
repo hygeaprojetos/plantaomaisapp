@@ -7,6 +7,7 @@ import { Start } from "../screens/Cadaster/Start";
 import { CapturedName } from "../screens/Cadaster/CaptureName";
 import { ConfirmName } from "../screens/Cadaster/ConfirmName";
 import { ChoosenPhoto } from "../screens/Cadaster/ChoosePhoto";
+import { FormPreCadaster } from "../screens/Cadaster/FormPreCadaster";
 import { FormCadaster } from "../screens/Cadaster/FormCadaster";
 import { VerificationCode } from "../screens/Cadaster/Verification";
 import { CameraPhoto } from "../screens/Cadaster/ChoosePhoto/Camera";
@@ -18,14 +19,51 @@ import { CheckListDocument } from "../screens/Cadaster/CheckListDocument";
 import { AttachmentsDoctor } from "../screens/Cadaster/AttachmentsDoctor";
 import { AttachmentsCadaster } from "../screens/Cadaster/AttachmentsCadaster";
 
-const Auth = createNativeStackNavigator();
+export type StackParamsList = {
+  Login: undefined;
+  Start: undefined;
+  CapturedName: {
+    name: string;
+  };
+  ConfirmName: {
+    name: string;
+  };
+  ChoosenPhoto: undefined;
+  FormCadaster: undefined;
+  FormPreCadaster: {
+    nameDoctor: string;
+    email: string;
+    phone: string;
+    numeroIdentificacao: string;
+    numeroCrm: string;
+    estadocrm: string;
+  };
+  VerificationCode: {
+    nameDoctor: string;
+    email: string;
+    phone: string;
+    numeroIdentificacao: string;
+    numeroCrm: string;
+    estadocrm: string;
+  };
+  CameraPhoto: undefined;
+  CheckListMessage: undefined;
+  PaymentLink: undefined;
+  InternalLink: undefined;
+  Attachments: undefined;
+  CheckListDocument: undefined;
+  AttachmentsDoctor: undefined;
+  AttachmentsCadaster: undefined;
+};
+
+const Auth = createNativeStackNavigator<StackParamsList>();
 
 export function AuthRoutes() {
   return (
     <Auth.Navigator>
-       <Auth.Screen
+      <Auth.Screen
         options={{ headerShown: false }}
-        name="login"
+        name="Login"
         component={Login}
       />
       <Auth.Screen
@@ -55,13 +93,18 @@ export function AuthRoutes() {
       />
       <Auth.Screen
         options={{ headerShown: false }}
-        name="FormCadaster"
-        component={FormCadaster}
+        name="FormPreCadaster"
+        component={FormPreCadaster}
       />
       <Auth.Screen
         options={{ headerShown: false }}
         name="VerificationCode"
         component={VerificationCode}
+      />
+      <Auth.Screen
+        options={{ headerShown: false }}
+        name="FormCadaster"
+        component={FormCadaster}
       />
       <Auth.Screen
         options={{ headerShown: false }}

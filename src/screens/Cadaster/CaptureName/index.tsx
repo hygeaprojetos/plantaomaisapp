@@ -12,12 +12,22 @@ import {
 import { Button } from "../../../components/Button";
 
 import { useNavigation } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackParamsList } from "../../../routes/auth.routes";
+
+interface NameProps {
+  name: string;
+}
 
 export function CapturedName() {
 
-  const navigation = useNavigation()
+  const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
 
-  const [name, setName] = useState<any>("");
+  const [name, setName] = useState<any>();
+
+  function handleNext() {
+    navigation.navigate("ConfirmName", { name });
+  }
 
   return (
     <Container>
@@ -34,8 +44,10 @@ export function CapturedName() {
 
       <ContainerButton>
         <Button
-        onPress={() => navigation.navigate("ConfirmName")}
-        title="Confirmar" type={name <= 0 ? "disabled" : null} />
+          onPress={handleNext}
+          title="Confirmar"
+          type={name === undefined ? "disabled" : null}
+        />
       </ContainerButton>
     </Container>
   );

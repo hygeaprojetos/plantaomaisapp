@@ -1,37 +1,52 @@
-import React from 'react'
+import React from "react";
 
 import {
-    Container,
-    Logo,
-    TitleName,
-    Description,
-    ContainerButton
-} from './styles'
+  Container,
+  Logo,
+  TitleName,
+  Description,
+  ContainerButton,
+} from "./styles";
 
-import logo from '../../../assets/logobg.png'
+import logo from "../../../assets/logobg.png";
 
-import {Button} from '../../../components/Button'
+import { Button } from "../../../components/Button";
 
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { StackParamsList } from "../../../routes/auth.routes";
+
+type RouteDetailParams = {
+  ConfirmName: {
+    name: string;
+  };
+};
+
+export type DoctorRouteProp = RouteProp<RouteDetailParams, "ConfirmName">;
 
 export function ConfirmName() {
-  
-  const navigation = useNavigation()
-  
+  const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
+
+  const route = useRoute<DoctorRouteProp>();
+  const nameDoctor = route.params;
+
   return (
     <Container>
+      <Logo source={logo} />
 
-      <Logo source={logo}/>
-
-      <TitleName>ok Dr(a) {'Mateus Nascimento'}</TitleName>
+      <TitleName>ok Dr(a) {nameDoctor.name}</TitleName>
 
       <Description>
-      Agora precisamos tirar uma foto para{'\n'}deixar seu cadastro mais completo!
+        Agora precisamos tirar uma foto para{"\n"}deixar seu cadastro mais
+        completo!
       </Description>
 
       <ContainerButton>
-      <Button onPress={() => navigation.navigate("ChoosenPhoto")} title="Vamos lá"/>
+        <Button
+          onPress={() => navigation.navigate("ChoosenPhoto")}
+          title="Vamos lá"
+        />
       </ContainerButton>
     </Container>
-  )
+  );
 }

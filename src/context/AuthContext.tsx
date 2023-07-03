@@ -46,9 +46,11 @@ type SignUpProps = {
   number: string;
   estado: string;
   cidade: string;
-  numeroCrm: string;
-  estadoCrm: string;
-  emissaoCrm: string;
+  crms: Array<{
+    numero: string;
+    estado: string;
+    emissao: string;
+  }>;
   numeroCnes: string;
   funcionario: string;
   atuando: string;
@@ -92,73 +94,28 @@ export function AuthProvider({ children }: ProviderProps) {
     }
   }
 
-  const fetch = require('node-fetch'); // Importe a biblioteca node-fetch (ou utilize a biblioteca de sua preferência)
+  const fetch = require("node-fetch");
 
-async function signUp({
-    atuando,
-    cep,
-    cidade,
-    dateNasc,
-    email,
-    emissaoCrm,
-    endereco,
-    estado,
-    estadoCivil,
-    estadoCrm,
-    funcionario,
-    name,
-    naturalidade,
-    number,
-    numberIdentify,
-    numeroCnes,
-    numeroCrm,
-    phone,
-    rg,
-    sexo,
-  }) {
+  async function signUp(data: SignUpProps) {
     try {
       const host = "http://10.0.12.10:3001";
       const response = await fetch(`${host}/doctor/create`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          atuando,
-          cep,
-          cidade,
-          dateNasc,
-          email,
-          emissaoCrm,
-          endereco,
-          estado,
-          estadoCivil,
-          estadoCrm,
-          funcionario,
-          name,
-          naturalidade,
-          number,
-          numberIdentify,
-          numeroCnes,
-          numeroCrm,
-          phone,
-          rg,
-          sexo,
-          medicoEspecialidade: ['Pediatra'],
-          medicoCurso: []
-        }),
+        body: JSON.stringify(data),
       });
-      const data = await response.json();
-      console.log('SUCESSO',data);
+      const responseData = await response.json();
+      console.log("SUCESSO", responseData);
       /* navigation.navigate('VerificationCode'); */
-      return data; // Opcional: retorne os dados do banco de dados para qualquer manipulação adicional
+      return responseData;
     } catch (error) {
       console.log("erro ao cadastrar", error);
-      throw error; // Opcional: relance o erro para ser tratado em um nível superior
+      throw error;
     }
   }
 
-  
   return (
     <AuthContext.Provider value={{ user, isAuthenticated, signIn, signUp }}>
       {children}
