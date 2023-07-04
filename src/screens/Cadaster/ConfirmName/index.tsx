@@ -34,7 +34,7 @@ export function ConfirmName() {
     <Container>
       <Logo source={logo} />
 
-      <TitleName>ok Dr(a) {nameDoctor.name}</TitleName>
+      <TitleName>Ok Dr(a) {nameDoctor.name}</TitleName>
 
       <Description>
         Agora precisamos tirar uma foto para{"\n"}deixar seu cadastro mais

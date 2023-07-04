@@ -29,14 +29,13 @@ export type SelectedProps = {
   estadocrm: string;
 };
 
-type FormDataDoctor = {
+type PreCadastroProps = {
   nameDoctor: string;
   email: string;
   phone: string;
   numeroIdentificacao: string;
   numeroCrm: string;
-  estadoCrm: string;
-  itemSelect: SelectedProps
+  itemSelect: any
 };
 
 export function FormPreCadaster() {
@@ -64,18 +63,17 @@ export function FormPreCadaster() {
   }
 
   function handleNext(){
-    const _OBJECT: FormDataDoctor = {
+    const _OBJECT: PreCadastroProps = {
       nameDoctor: name,
       email: email,
       phone: phone,
       numeroIdentificacao: numberIndentify,
       numeroCrm: numberCrm,
       itemSelect,
-      estadoCrm: ""
     };
     navigation.navigate("VerificationCode", _OBJECT)
 
-    console.log('doctor', _OBJECT)
+    //console.log('doctor', _OBJECT.itemSelect)
   }
 
   return (

@@ -29,14 +29,19 @@ export type StackParamsList = {
     name: string;
   };
   ChoosenPhoto: undefined;
-  FormCadaster: undefined;
+  FormCadaster: {
+    nameDoctor: string;
+    email: string;
+    phone: string;
+    numeroIdentificacao: string;
+    numeroCrm: string;
+  };
   FormPreCadaster: {
     nameDoctor: string;
     email: string;
     phone: string;
     numeroIdentificacao: string;
     numeroCrm: string;
-    estadocrm: string;
   };
   VerificationCode: {
     nameDoctor: string;
@@ -44,7 +49,7 @@ export type StackParamsList = {
     phone: string;
     numeroIdentificacao: string;
     numeroCrm: string;
-    estadocrm: string;
+    itemSelect: string;
   };
   CameraPhoto: undefined;
   CheckListMessage: undefined;
