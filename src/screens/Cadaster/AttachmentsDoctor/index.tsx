@@ -21,7 +21,7 @@ import { ActivityIndicator, Text} from "react-native";
 export function AttachmentsDoctor({ navigation, route }) {
   const [anexos, setAnexos] = useState([])
   const [loading, setLoading] = useState(false)
-  console.log({[route.params.typeAnexo]: anexos})
+  
   const getDocument = async (index: 0 | 1) => {
     setLoading(true)
     try {
@@ -84,7 +84,7 @@ export function AttachmentsDoctor({ navigation, route }) {
         </Box>
         {anexos[1] ? <Text>{anexos[1]}</Text> : <></>}
       </ContainerBox>
-      <Button title="Anexar"/>
+      <Button title="Anexar" onPress={() => console.log({[route.params.typeAnexo]: anexos})}/>
     </Container>
   );
 }
