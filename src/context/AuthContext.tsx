@@ -31,29 +31,20 @@ type SignInProps = {
   password: string;
 };
 
-type SignUpProps = {
-  name: string;
-  email: string;
-  phone: string;
-  rg: string;
-  numberIdentify: string;
-  dateNasc: string;
-  naturalidade: string;
-  estadoCivil: string;
-  sexo: string;
-  cep: string;
-  endereco: string;
-  number: string;
+type CrmsProps = {
+  numero: string;
   estado: string;
-  cidade: string;
-  crms: Array<{
-    numero: string;
-    estado: string;
-    emissao: string;
-  }>;
-  numeroCnes: string;
-  funcionario: string;
-  atuando: string;
+  emissao: string;
+};
+
+type SignUpProps = {
+  nome: string;
+  email: string;
+  senha: string;
+  telefone: string;
+  cpf: string;
+  numeroCrm: string;
+  crms: CrmsProps[];
 };
 
 export const AuthContext = createContext({} as AuthContextData);
@@ -94,7 +85,7 @@ export function AuthProvider({ children }: ProviderProps) {
     }
   }
 
-  const fetch = require("node-fetch");
+  //const fetch = require("node-fetch");
 
   async function signUp(data: SignUpProps) {
     try {
@@ -104,13 +95,14 @@ export function AuthProvider({ children }: ProviderProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({...data, web: false}),
       });
       const responseData = await response.json();
+
       console.log("SUCESSO", responseData);
-      /* navigation.navigate('VerificationCode'); */
-      return responseData;
+      
     } catch (error) {
+
       console.log("erro ao cadastrar", error);
       throw error;
     }

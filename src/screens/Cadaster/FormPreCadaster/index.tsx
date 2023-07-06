@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import {
   Container,
@@ -24,25 +24,34 @@ import { PickerCrm } from "../../../components/Picker";
 import { estados } from "../../../utils/estados";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParamsList } from "../../../routes/auth.routes";
+import { AuthContext } from "../../../context/AuthContext";
+import { PickerEspecialidades } from "./Components/Especialidade";
 
 export type SelectedProps = {
   estadocrm: string;
 };
-
-type PreCadastroProps = {
-  nameDoctor: string;
-  email: string;
-  phone: string;
-  numeroIdentificacao: string;
-  numeroCrm: string;
-  itemSelect: any
+export type SelectedEspecProps = {
+  nome: [] | string;
 };
 
+interface props {
+  nome: SelectedEspecProps
+}
+
+interface Especialidade {
+  id: string;
+  nome: string;
+}
+
 export function FormPreCadaster() {
-  const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
+  const { signUp } = useContext(AuthContext);
+  const navigation =
+    useNavigation<NativeStackNavigationProp<StackParamsList>>();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [confirmSenha, setConfirmSenha] = useState("");
   const [phone, setPhone] = useState("");
   const [numberIndentify, setNumberIndentify] = useState("");
   const [numberCrm, setNumberCrm] = useState("");
@@ -50,9 +59,46 @@ export function FormPreCadaster() {
   const [popUpVisible, setPopUpVisible] = useState(false);
   const [itemSelect, setItemSelect] = useState<SelectedProps | undefined>();
 
+  const [especialidadesVisible, setEspecialidadesVisible] = useState(false);
+  const [especialidadeSelect, setEspecialidadeSelect] = useState<SelectedEspecProps | undefined>();
+  
+  const [especialidades, setEspecialidades] = useState<Especialidade[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const host = "http://10.0.12.10:3001";
+      try {
+        const response = await fetch(`${host}/especialidade/list`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            currentPage: 0,
+          }),
+        });
+        const data = await response.json();
+        const especialidadesData = data.response[0] as Especialidade[];
+
+        setEspecialidades(data)
+        setEspecialidades(especialidadesData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+  
   const estadosSiglas: SelectedProps[] = estados.map((estado) => ({
     estadocrm: estado.sigla,
   }));
+
+  const nomesEspecialidades: any = Array.isArray(especialidades)
+  ? especialidades.map(especialidade => especialidade.nome)
+  : [];
+
+  //console.log("{especialidades}", nomesEspecialidades)
 
   function handleChangeSelect(item: SelectedProps) {
     setItemSelect(item);
@@ -61,19 +107,38 @@ export function FormPreCadaster() {
   function openModal() {
     setPopUpVisible(true);
   }
+  function handleEspecialidades(item: SelectedEspecProps) {
+    setEspecialidadeSelect(item);
+    setEspecialidadesVisible(false);
+  }
+  function openModalEspecialidades() {
+    setEspecialidadesVisible(true);
+  }
 
-  function handleNext(){
-    const _OBJECT: PreCadastroProps = {
-      nameDoctor: name,
+  async function handleNext() {
+    const estadocrm = itemSelect.estadocrm;
+    const _OBJECT: any = {
+      nome: name,
       email: email,
-      phone: phone,
-      numeroIdentificacao: numberIndentify,
-      numeroCrm: numberCrm,
-      itemSelect,
+      senha: senha.replace(" ", ""),
+      telefone: phone,
+      cpf: numberIndentify,
+      especialidade: especialidadeSelect,
+      crms: [
+        {
+          numero: numberCrm,
+          estado: estadocrm,
+          emissao: "00/00/0000",
+        },
+      ],
     };
-    navigation.navigate("VerificationCode", _OBJECT)
 
-    //console.log('doctor', _OBJECT.itemSelect)
+    if (senha.replace(" ", "") != confirmSenha.replace(" ", "")) {
+      alert("As senhas não são iguais");
+    } else {
+      await signUp(_OBJECT);
+      navigation.navigate("VerificationCode", _OBJECT);
+    }
   }
 
   return (
@@ -105,6 +170,18 @@ export function FormPreCadaster() {
             placeholder="Seiu melhor e-mail"
           />
           <InputCadaster
+            value={senha}
+            onChangeText={setSenha}
+            title="Senha*"
+            placeholder="************"
+          />
+          <InputCadaster
+            value={confirmSenha}
+            onChangeText={setConfirmSenha}
+            title="Confirmar senha*"
+            placeholder="************"
+          />
+          <InputCadaster
             value={phone}
             onChangeText={setPhone}
             title="Telefone*"
@@ -126,7 +203,7 @@ export function FormPreCadaster() {
           <InputSelected
             onPress={() => openModal()}
             title="Estado CRM*"
-            textSelect={itemSelect ? itemSelect?.estadocrm : 'Estado CRM'}
+            textSelect={itemSelect ? itemSelect?.estadocrm : "Estado CRM"}
           />
 
           <ContainerTitle>
@@ -134,15 +211,16 @@ export function FormPreCadaster() {
           </ContainerTitle>
 
           <InputSelected
-            onPress={() => alert("ok")}
+            onPress={() => alert('localidade')}
             title="Localidade*"
             textSelect="Localidade"
           />
 
+
           <InputSelected
-            onPress={() => alert("ok")}
+            onPress={() => openModalEspecialidades()}
             title="Especialidade*"
-            textSelect="Selecione a especialidade"
+            textSelect={especialidadeSelect ? especialidadeSelect : "Selecione a especialidade"}
           />
 
           <Button title="Avançar" onPress={() => handleNext()} />
@@ -156,6 +234,17 @@ export function FormPreCadaster() {
               onClosed={() => setPopUpVisible(false)}
               options={estadosSiglas}
               selectedItem={handleChangeSelect}
+            />
+          </Modal>
+          <Modal
+            transparent={true}
+            visible={especialidadesVisible}
+            animationType="slide"
+          >
+            <PickerEspecialidades
+              onClosed={() => setEspecialidadesVisible(false)}
+              options={nomesEspecialidades}
+              selectedItem={handleEspecialidades}
             />
           </Modal>
         </ContainerFormInput>

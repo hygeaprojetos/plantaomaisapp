@@ -22,40 +22,63 @@ import { InputSelected } from "../../../components/Input/InputSelected";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParamsList } from "../../../routes/auth.routes";
 
+type CrmsProps = {
+  numero: string;
+  estado: string;
+  emissao: string;
+};
+
 type RouteDetailParams = {
   FormCadaster: {
-      nameDoctor: string;
-      email: string;
-      phone: string;
-      numeroIdentificacao: string;
-      numeroCrm: string;
-      itemSelect: {
-        estadocrm: string;
-      };
+    nome: string;
+    email: string;
+    telefone: string;
+    cpf: string;
+    crms: [
+      {
+        emissao: string;
+        estado: string;
+        numero: string;
+      }
+    ];
   };
 };
+
+interface SendSignUpPut {
+  nome: string;
+  telefone: string;
+  email: string;
+  senha: string;
+  dataNascimento: string;
+  sexo: string;
+  endereco: string;
+  numero: string;
+  cep: string;
+  complemento: string;
+  estado: string;
+  cidade: string;
+  numeroCrm: string;
+  estadoCrm: string;
+  emissorCrm: string;
+  numeroCrmExt: string;
+  estadoCrmExt: string;
+}
 
 export type DoctorRouteProp = RouteProp<RouteDetailParams, "FormCadaster">;
 
 export function FormCadaster() {
   const { signUp } = useContext(AuthContext);
 
-  const navigation =
-    useNavigation<NativeStackNavigationProp<StackParamsList>>();
+  const navigation = useNavigation<NativeStackNavigationProp<StackParamsList>>();
 
   const route = useRoute<DoctorRouteProp>();
   const preCadastro = route.params;
 
-  console.log(preCadastro?.itemSelect.estadocrm)
-
-  /* const emailField = preCadastro.response.email
-  const nameField = preCadastro.response.nome */
-
-  const [name, setName] = useState(preCadastro.nameDoctor);
+  const [name, setName] = useState(preCadastro.nome);
   const [email, setEmail] = useState(preCadastro.email);
-  const [phone, setPhone] = useState(preCadastro.phone);
-  const [rg, setRg] = useState('');
-  const [numberIndentify, setNumberIndentify] = useState(preCadastro.numeroIdentificacao);
+  const [phone, setPhone] = useState(preCadastro.telefone);
+  const [rg, setRg] = useState("");
+  const [numberIndentify, setNumberIndentify] = useState(preCadastro.cpf);
   const [date, setDate] = useState("");
   const [naturalidade, setNaturalidade] = useState("");
   const [estadoCivil, setEstadoCivil] = useState("");
@@ -65,15 +88,53 @@ export function FormCadaster() {
   const [number, setNumber] = useState("");
   const [state, setState] = useState("");
   const [city, setCity] = useState("");
-  const [numberCrm, setNumberCrm] = useState(preCadastro.numeroCrm);
-  const [emissaoCrm, setEmissaoCrm] = useState("");
+  const [numberCrm, setNumberCrm] = useState(preCadastro.crms?.[0].numero);
+  const [emissaoCrm, setEmissaoCrm] = useState(preCadastro.crms?.[0].emissao);
   const [cnes, setCnes] = useState("");
   const [curso, setCurso] = useState("");
   const [location, setLocation] = useState("");
 
-  async function handleNext() {
-    navigation.navigate("CheckListMessage");
+  async function alterarFormDoutor(dados) {
+    try {
+      const response = await fetch('/doctor/edit', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dados),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Ocorreu um erro ao atualizar os dados');
+      }
+  
+      const responseData = await response.json();
+      console.log('Dados atualizados com sucesso:', responseData);
+    } catch (error) {
+      console.error('Ocorreu um erro ao atualizar os dados:', error);
+    }
   }
+  
+  const dadosAtualizados = {
+    nome: preCadastro.nome,
+    telefone: preCadastro.telefone,
+    email: preCadastro.email,
+    dataNascimento: date,
+    cpf: preCadastro.cpf,
+    sexo: 'Masculino',
+    endereco: endereco,
+    numero: number,
+    cep: cep,
+    complemento: 'Novo Complemento',
+    estado: state,
+    cidade: city,
+    numeroCrm: preCadastro.crms?.[0].numero,
+    estadoCrm: preCadastro.crms?.[0].estado,
+    emissorCrm: preCadastro.crms?.[0].emissao,
+  };
+  
+  alterarFormDoutor(dadosAtualizados);
+  
 
   return (
     <Container>
@@ -101,7 +162,7 @@ export function FormCadaster() {
             value={email}
             onChangeText={setEmail}
             title="E-mail*"
-            placeholder='Digite seu melhor e-mail'
+            placeholder="Digite seu melhor e-mail"
           />
           <InputCadaster
             value={phone}
@@ -156,7 +217,7 @@ export function FormCadaster() {
             title="Número*"
             placeholder="Endereço"
           />
-          <InputSelected title="Estado*" textSelect={preCadastro?.itemSelect.estadocrm } />
+          <InputSelected title="Estado*" textSelect="Estado" />
           <InputCadaster
             value={city}
             onChangeText={setCity}
@@ -169,7 +230,10 @@ export function FormCadaster() {
             title="Número CRM*"
             placeholder="Numero CRM"
           />
-          <InputSelected title="Estado CRM*" textSelect="Estado CRM" />
+          <InputSelected
+            title="Estado CRM*"
+            textSelect={preCadastro.crms?.[0].estado}
+          />
           <InputCadaster
             value={emissaoCrm}
             onChangeText={setEmissaoCrm}

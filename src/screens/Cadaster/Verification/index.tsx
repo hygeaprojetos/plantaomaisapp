@@ -29,15 +29,11 @@ type RouteDetailParams = {
     numeroIdentificacao: string;
     numeroCrm: string;
     itemSelect: any;
+    especialidade: string
   };
 };
 
 export type DoctorRouteProp = RouteProp<RouteDetailParams, "VerificationCode">;
-
-type CodeProps = {
-  email: "mateus@gmail.com.br";
-  codigo: "6dant";
-};
 
 export function VerificationCode() {
   const navigation =
@@ -46,7 +42,7 @@ export function VerificationCode() {
   const route = useRoute<DoctorRouteProp>();
   const preCadastro = route.params;
 
- /*  console.log("[EMAIL] =>", preCadastro.email); */
+  console.log("[EMAIL] =>", preCadastro);
 
   const [inputs, setInputs] = useState({
     code1: "",
@@ -72,8 +68,7 @@ export function VerificationCode() {
 
     try {
       const host = "http://10.0.12.10:3001";
-      const token =
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1hdGV1c0BnbWFpbC5jb20uYnIiLCJuYW1lIjoibWF0ZXVzIiwicGhvbmUiOiI5MjAxOTIxIiwiaWF0IjoxNjg4NDkxMzMwLCJleHAiOjE2ODkwOTYxMzB9._U1lSzlx_Agg4E-HLdSfKTb4FqR8DTfRi3pIj65Vaoc";
+      /* const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNhc3NAZ21haWwuY29tIiwibmFtZSI6InNhc2FzYSIsInBob25lIjoiMjEyMSIsImlhdCI6MTY4ODY0MDUxNCwiZXhwIjoxNjg5MjQ1MzE0fQ.648jfCJunmwzPmatHyZx-W9sR09nLP7YuMJKSo5MUCs" */
 
       const data = {
         email: preCadastro.email,
@@ -84,13 +79,13 @@ export function VerificationCode() {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `${token}`,
+          //Authorization: `${token}`,
         },
         body: JSON.stringify(data),
       });
 
       const responseData = await response.json();
-      //console.log("TESTE []", responseData);
+      console.log("TESTE []", responseData);
 
       if (response.ok) {
         navigation.navigate("FormCadaster", preCadastro);
@@ -110,7 +105,7 @@ export function VerificationCode() {
         <Description>
           Acabamos de enviar um código de{"\n"}
           verificação de 4 dígitos para{"\n"}
-          robert.fox@gmail.com.{"\n"}
+          {preCadastro.email}{"\n"}
           Digite o código na caixa abaixo{"\n"}
           para continuar.
         </Description>

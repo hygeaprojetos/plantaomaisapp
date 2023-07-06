@@ -39,18 +39,13 @@ export type StackParamsList = {
   FormPreCadaster: {
     nameDoctor: string;
     email: string;
+    senha: string;
     phone: string;
     numeroIdentificacao: string;
     numeroCrm: string;
+    especialidade: string
   };
-  VerificationCode: {
-    nameDoctor: string;
-    email: string;
-    phone: string;
-    numeroIdentificacao: string;
-    numeroCrm: string;
-    itemSelect: string;
-  };
+  VerificationCode:{};
   CameraPhoto: undefined;
   CheckListMessage: undefined;
   PaymentLink: undefined;
