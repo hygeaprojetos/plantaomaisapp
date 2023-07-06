@@ -126,16 +126,17 @@ export function AuthRoutes() {
         name="CheckListDocument"
         component={CheckListDocument}
       />
-      <Auth.Screen
-        options={{ headerShown: false }}
-        name="AttachmentsDoctor"
-        component={AttachmentsDoctor}
-      />
+     
       <Auth.Screen
         options={{ headerShown: false }}
         name="AttachmentsCadaster"
         component={AttachmentsCadaster}
       />
+      <Auth.Screen
+        options={{ headerShown: false }}
+        name="AttachmentsDoctor"
+        component={AttachmentsDoctor}
+      /> 
       <Auth.Screen
         options={{ headerShown: false }}
         name="InternalLink"

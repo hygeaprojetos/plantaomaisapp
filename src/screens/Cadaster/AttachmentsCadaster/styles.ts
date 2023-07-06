@@ -1,6 +1,6 @@
 import styled from 'styled-components/native'
 
-export const Container = styled.View`
+export const Container = styled.ScrollView`
     flex: 1;
     background-color: #fff;
 `
@@ -32,9 +32,9 @@ export const ContainerBanner = styled.View`
     padding-left: 10%;
 `
 export const ContainerListAttch = styled.View`
-    padding: 0 8%;
+    padding: 0 6%;
     flex-direction: row;
-    justify-content: space-between;
+    flex-wrap: wrap;
 `
 export const Box = styled.TouchableOpacity`
     /* background-color: #234A6B; */
@@ -45,6 +45,7 @@ export const Box = styled.TouchableOpacity`
     align-items: center;
     justify-content: center;
     margin-top: 30px;
+    margin-right: 5px;
 `
 export const BoxIcon = styled.View`
     background-color: #F4F4F4;
@@ -57,7 +58,7 @@ export const BoxIcon = styled.View`
 `
 export const Icon = styled.Image``
 export const TitleAnexo = styled.Text`
-    font-size: 15px;
+    font-size: 12px;
     color: #234A6B;
 `
 export const SubTitleAnexo = styled.Text`
