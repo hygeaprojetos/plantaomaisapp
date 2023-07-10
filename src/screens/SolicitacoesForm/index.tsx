@@ -22,7 +22,7 @@ export const SolicitacoesForm= ({route}) => {
     })
 
     function format(string: string){
-        const value = string.replace(/^(\d{2})(\d{2})(\d{4})$/g, '$1/$2/$3').slice(0, 10)
+        const value = string.slice(0, 12).replace(/^(\d{2})(\d{2})(\d{4})$/g, '$1/$2/$3').slice(0, 10)
         
         return value
     }
@@ -47,6 +47,7 @@ export const SolicitacoesForm= ({route}) => {
             setModal(true)
             setLoading(false)
         } catch(err) {
+            alert("Erro, verifique se as suas datas são validas")
             setLoading(false)
         }
     }

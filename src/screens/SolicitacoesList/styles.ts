@@ -39,7 +39,7 @@ export const Icon = styled.View`
 
 export const ItemText = styled.Text`
     font-weight: 200;
-    width: 150px;
+    width: 50%;
 `
 
 export const DateContainer = styled.View`
