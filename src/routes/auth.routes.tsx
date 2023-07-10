@@ -18,6 +18,11 @@ import { Attachments } from "../screens/Cadaster/Attachments";
 import { CheckListDocument } from "../screens/Cadaster/CheckListDocument";
 import { AttachmentsDoctor } from "../screens/Cadaster/AttachmentsDoctor";
 import { AttachmentsCadaster } from "../screens/Cadaster/AttachmentsCadaster";
+import { Dashboard } from "../screens/dashboard";
+import { Solicitacoes } from "../screens/Solicitacoes";
+import { SolicitacoesForm } from "../screens/SolicitacoesForm";
+import { SolicitacoesList } from "../screens/SolicitacoesList";
+import { Solicitacao } from "../screens/solicitacao";
 
 export type StackParamsList = {
   Login: undefined;
@@ -43,8 +48,19 @@ export type StackParamsList = {
     phone: string;
     numeroIdentificacao: string;
     numeroCrm: string;
-    especialidade: string
+    especialidade: string;
   };
+  Dashboard: {};
+  Solicitacoes: {
+    
+  };
+  SolicitacoesForm: {
+    type: string;
+  };
+  Solicitacao: {
+    id: string;
+  }
+  SolicitacoesList: {};
   VerificationCode:{};
   CameraPhoto: undefined;
   CheckListMessage: undefined;
@@ -141,6 +157,31 @@ export function AuthRoutes() {
         options={{ headerShown: false }}
         name="InternalLink"
         component={InternalLink}
+      />
+      <Auth.Screen
+        options={{ headerShown: false }}
+        name="Dashboard"
+        component={Dashboard}
+      />
+      <Auth.Screen
+        options={{ headerShown: false }}
+        name="Solicitacoes"
+        component={Solicitacoes}
+      />
+      <Auth.Screen
+        options={{ headerShown: false }}
+        name="SolicitacoesForm"
+        component={SolicitacoesForm}
+      />
+      <Auth.Screen
+        options={{ headerShown: false }}
+        name="SolicitacoesList"
+        component={SolicitacoesList}
+      />
+      <Auth.Screen
+        options={{ headerShown: false }}
+        name="Solicitacao"
+        component={Solicitacao}
       />
     </Auth.Navigator>
   );
