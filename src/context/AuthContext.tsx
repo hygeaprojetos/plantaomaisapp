@@ -2,6 +2,7 @@ import React, { useState, createContext, ReactNode } from "react";
 import { api } from "../services/api";
 
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type AuthContextData = {
   user: UserProps;
@@ -98,7 +99,8 @@ export function AuthProvider({ children }: ProviderProps) {
         body: JSON.stringify({...data, web: false}),
       });
       const responseData = await response.json();
-
+      console.log("{sasasa}", responseData.response.token)
+      await AsyncStorage.setItem('tokenPL', responseData.response.token)
       console.log("SUCESSO", responseData);
       
     } catch (error) {

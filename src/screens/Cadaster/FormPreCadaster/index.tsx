@@ -26,18 +26,17 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { StackParamsList } from "../../../routes/auth.routes";
 import { AuthContext } from "../../../context/AuthContext";
 import { PickerEspecialidades } from "./Components/Especialidade";
+import { PickerLocalidades } from "./Components/Localidade";
 
 export type SelectedProps = {
   estadocrm: string;
 };
+export type SelectedEstadosProps = {
+  estadoLocalidade: string;
+};
 export type SelectedEspecProps = {
   nome: [] | string;
 };
-
-interface props {
-  nome: SelectedEspecProps
-}
-
 interface Especialidade {
   id: string;
   nome: string;
@@ -62,6 +61,9 @@ export function FormPreCadaster() {
   const [especialidadesVisible, setEspecialidadesVisible] = useState(false);
   const [especialidadeSelect, setEspecialidadeSelect] = useState<SelectedEspecProps | undefined>();
   
+  const [localidadeVisible, setLocalidadeVisible] = useState(false)
+  const [localidadeSelect, setlocalidadeSelect] = useState<SelectedProps | undefined>();
+
   const [especialidades, setEspecialidades] = useState<Especialidade[]>([]);
 
   useEffect(() => {
@@ -80,7 +82,7 @@ export function FormPreCadaster() {
         const data = await response.json();
         const especialidadesData = data.response[0] as Especialidade[];
 
-        setEspecialidades(data)
+        setEspecialidades(data);
         setEspecialidades(especialidadesData);
       } catch (error) {
         console.error(error);
@@ -89,16 +91,18 @@ export function FormPreCadaster() {
 
     fetchData();
   }, []);
-  
+
   const estadosSiglas: SelectedProps[] = estados.map((estado) => ({
     estadocrm: estado.sigla,
   }));
 
-  const nomesEspecialidades: any = Array.isArray(especialidades)
-  ? especialidades.map(especialidade => especialidade.nome)
-  : [];
+  const localidade: SelectedProps[] = estados.map((estado) => ({
+    estadocrm: estado.sigla,
+  }));
 
-  //console.log("{especialidades}", nomesEspecialidades)
+  const nomesEspecialidades: any = Array.isArray(especialidades)
+    ? especialidades.map((especialidade) => especialidade.nome)
+    : [];
 
   function handleChangeSelect(item: SelectedProps) {
     setItemSelect(item);
@@ -114,6 +118,13 @@ export function FormPreCadaster() {
   function openModalEspecialidades() {
     setEspecialidadesVisible(true);
   }
+  function handleLocalidades(item: SelectedProps) {
+    setlocalidadeSelect(item);
+    setLocalidadeVisible(false);
+  }
+  function openLocalidade(){
+    setLocalidadeVisible(true)
+  }
 
   async function handleNext() {
     const estadocrm = itemSelect.estadocrm;
@@ -124,6 +135,7 @@ export function FormPreCadaster() {
       telefone: phone,
       cpf: numberIndentify,
       especialidade: especialidadeSelect,
+      localidade: localidadeSelect,
       crms: [
         {
           numero: numberCrm,
@@ -211,16 +223,19 @@ export function FormPreCadaster() {
           </ContainerTitle>
 
           <InputSelected
-            onPress={() => alert('localidade')}
+            onPress={() => openLocalidade()}
             title="Localidade*"
-            textSelect="Localidade"
+            textSelect={localidadeSelect ? localidadeSelect?.estadocrm : "localidade"}
           />
-
 
           <InputSelected
             onPress={() => openModalEspecialidades()}
             title="Especialidade*"
-            textSelect={especialidadeSelect ? especialidadeSelect : "Selecione a especialidade"}
+            textSelect={
+              especialidadeSelect
+                ? especialidadeSelect
+                : "Selecione a especialidade"
+            }
           />
 
           <Button title="Avançar" onPress={() => handleNext()} />
@@ -234,6 +249,17 @@ export function FormPreCadaster() {
               onClosed={() => setPopUpVisible(false)}
               options={estadosSiglas}
               selectedItem={handleChangeSelect}
+            />
+          </Modal>
+          <Modal
+            transparent={true}
+            visible={localidadeVisible}
+            animationType="slide"
+          >
+            <PickerLocalidades
+              onClosed={() => setLocalidadeVisible(false)}
+              options={localidade}
+              selectedItem={handleLocalidades}
             />
           </Modal>
           <Modal

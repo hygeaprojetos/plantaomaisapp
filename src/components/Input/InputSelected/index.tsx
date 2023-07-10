@@ -6,8 +6,8 @@ import { AntDesign } from '@expo/vector-icons';
 
 interface Props {
   title?: string;
-  textSelect: any;
-  onPress: () => void;
+  textSelect?: any;
+  onPress?: () => void;
 }
 
 export function InputSelected({title, textSelect, onPress}: Props) {

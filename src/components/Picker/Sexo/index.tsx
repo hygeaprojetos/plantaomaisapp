@@ -8,7 +8,11 @@ import {
 } from "./styles";
 
 import { ScrollView } from "react-native";
-import { SelectedProps } from "../../";
+
+export type SelectedProps = {
+    masculino: string;
+    feminino: string;
+};
 
 interface ModalInfoProps {
   options?: SelectedProps[];
@@ -16,19 +20,18 @@ interface ModalInfoProps {
   selectedItem: (item: SelectedProps) => void;
 }
 
-export function PickerLocalidades({
+export function PickerSexo({
   onClosed,
   options,
   selectedItem,
 }: ModalInfoProps) {
-
   async function handleSelected(item: SelectedProps) {
     selectedItem(item);
   }
 
   const option = options?.map((item, index) => (
     <ButtonOpiton key={index} onPress={() => handleSelected(item)}>
-      <TextSiglas>{item?.estadocrm!}</TextSiglas>
+      <TextSiglas>{item}</TextSiglas>
     </ButtonOpiton>
   ));
 
