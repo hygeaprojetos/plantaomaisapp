@@ -79,31 +79,6 @@ export function AuthRoutes() {
     <Auth.Navigator>
       <Auth.Screen
         options={{ headerShown: false }}
-        name="Dashboard"
-        component={Dashboard}
-      />
-      <Auth.Screen
-        options={{ headerShown: false }}
-        name="Solicitacoes"
-        component={Solicitacoes}
-      />
-      <Auth.Screen
-        options={{ headerShown: false }}
-        name="SolicitacoesForm"
-        component={SolicitacoesForm}
-      />
-      <Auth.Screen
-        options={{ headerShown: false }}
-        name="SolicitacoesList"
-        component={SolicitacoesList}
-      />
-      <Auth.Screen
-        options={{ headerShown: false }}
-        name="Solicitacao"
-        component={Solicitacao}
-      />
-      {/* <Auth.Screen
-        options={{ headerShown: false }}
         name="Login"
         component={Login}
       />
@@ -182,7 +157,32 @@ export function AuthRoutes() {
         options={{ headerShown: false }}
         name="InternalLink"
         component={InternalLink}
-      /> */}
+      />
+      <Auth.Screen
+        options={{ headerShown: false }}
+        name="Dashboard"
+        component={Dashboard}
+      />
+      <Auth.Screen
+        options={{ headerShown: false }}
+        name="Solicitacoes"
+        component={Solicitacoes}
+      />
+      <Auth.Screen
+        options={{ headerShown: false }}
+        name="SolicitacoesForm"
+        component={SolicitacoesForm}
+      />
+      <Auth.Screen
+        options={{ headerShown: false }}
+        name="SolicitacoesList"
+        component={SolicitacoesList}
+      />
+      <Auth.Screen
+        options={{ headerShown: false }}
+        name="Solicitacao"
+        component={Solicitacao}
+      />
     </Auth.Navigator>
   );
 }
