@@ -36,6 +36,12 @@ export const ContainerListAttch = styled.View`
     flex-direction: row;
     flex-wrap: wrap;
 `
+export const ContainerButton = styled.View`
+    width: 100%;
+    padding: 0 20px;
+    margin-bottom: 20px;
+    
+`
 export const Box = styled.TouchableOpacity`
     /* background-color: #234A6B; */
     width: 156px;

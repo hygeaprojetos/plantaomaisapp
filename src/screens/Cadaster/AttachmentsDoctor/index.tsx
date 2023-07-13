@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import * as DocumentPicker from 'expo-document-picker';
+import React, { useState, useContext } from "react";
+import * as DocumentPicker from "expo-document-picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   Container,
   Title,
@@ -16,43 +17,74 @@ import icon from "../../../assets/attachments.png";
 import anex from "../../../assets/anex.png";
 import { Button } from "../../../components/Button";
 import { api } from "../../../services/api";
-import { ActivityIndicator, Text} from "react-native";
+import { ActivityIndicator, Text } from "react-native";
+import { AuthContext, UpdateProps } from "../../../context/AuthContext";
+
+import { useNavigation,RouteProp, useRoute } from "@react-navigation/native";
 
 export function AttachmentsDoctor({ navigation, route }) {
-  const [anexos, setAnexos] = useState([])
-  const [loading, setLoading] = useState(false)
-  
-  const getDocument = async (index: 0 | 1) => {
-    setLoading(true)
-    try {
-      const doc = await DocumentPicker.getDocumentAsync({multiple: false})
-      if(doc.type === 'success'){
-        const formData = new FormData();
 
-        formData.append('file', {
+  const {atualizarAnexos, etapaCadaster} = useContext(AuthContext)
+
+  const navigationContent = useNavigation();
+
+  const [anexos, setAnexos] = useState([]);
+
+  console.log('{kkk}', etapaCadaster)
+
+  console.log('anexos', anexos)
+  const [loading, setLoading] = useState(false);
+
+  const getDocument = async (index: 0 | 1) => {
+    //setLoading(true);
+    try {
+      const doc = await DocumentPicker.getDocumentAsync({ multiple: false });
+      if (doc.type === "success") {
+        const formData = new FormData();
+  
+        formData.append("file", {
           uri: doc.uri,
           type: doc.mimeType,
-          name: `upload`
+          name: `upload`,
         } as unknown as File);
-        
-        const response = await api.post('/anexo/send', formData, {
+  
+        const token = await AsyncStorage.getItem('tokenPL');
+        const host = "http://10.0.12.10:3001";
+        const response = await fetch(`${host}/anexo/send`, {
+          method: 'POST',
           headers: {
-            'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRpZWdvLmppbWVuZXNAZG9jc29sdXRpb25tZWQuY29tLmJyIiwibmFtZSI6InNldHNldCIsInBob25lIjoic2V0c2V0IiwiaWF0IjoxNjg4NDkxNTE2LCJleHAiOjE2ODkwOTYzMTZ9.m-XkRUBJ6_PKPzFS2bAMrWVYh2mwZxWhbGUf8zjxpoU',
-            'Content-Type': 'multipart/form-data'
-          }
-        })
-
-        const newArray = [...anexos]
-        newArray[index] = response.data.response.images[0]
-
-        setAnexos(newArray)
-        setLoading(false)
+            Authorization: token,
+            'Content-Type': 'multipart/form-data',
+          },
+          body: formData,
+        });
+  
+        const responseData = await response.json();
+  
+        const newArray = [...anexos];
+        newArray[index] = {
+          anexo: responseData.response.images[0],
+          tipo: index === 0 ? "Frente" : "Verso",
+          observacao: "",
+          status: "Pendente",
+          action: "create"
+        };
+  
+        setAnexos(newArray);
+        //setLoading(false);
       }
-    } catch(err) {
-      console.log('ERRRRROR', JSON.stringify(err))
-      setLoading(false)
+    } catch (err) {
+      console.log("ERRRRROR", JSON.stringify(err));
+      //setLoading(false);
+    }
+  };
+
+  function goBackAnexo(){
+    if(atualizarAnexos(route.params.typeAnexo, anexos)){
+      navigationContent.navigate("AttachmentsCadaster")
     }
   }
+  
 
   return (
     <Container>
@@ -61,30 +93,33 @@ export function AttachmentsDoctor({ navigation, route }) {
       <ContainerBox>
         <Box>
           <FlexItems>
-            <BoxIcon onPress={() => loading ? () => {} : getDocument(0)}>
-              { loading? <ActivityIndicator/> : <Icon source={icon} /> }
+            <BoxIcon onPress={() => (loading ? () => {} : getDocument(0))}>
+              {/* {loading ? <ActivityIndicator /> : <Icon source={icon} />} */}
             </BoxIcon>
             <Name>Anexo frente</Name>
-              <AnexoIcon>
-            <Icon source={anex} />
+            <AnexoIcon>
+              <Icon source={anex} />
             </AnexoIcon>
           </FlexItems>
         </Box>
-        {anexos[0] ? <Text>{anexos[0]}</Text> : <></>}
+        {/* {anexos[0] ? <Text>{anexos[0].anexo}</Text> : <></>} */}
         <Box>
           <FlexItems>
-            <BoxIcon  onPress={() => loading ? () => {} : getDocument(1)}>
-             { loading? <ActivityIndicator/> : <Icon source={icon} /> }
+            <BoxIcon onPress={() => (loading ? () => {} : getDocument(1))}>
+              {loading ? <ActivityIndicator /> : <Icon source={icon} />}
             </BoxIcon>
             <Name>Anexo verso</Name>
-              <AnexoIcon>
-            <Icon source={anex} />
+            <AnexoIcon>
+              <Icon source={anex} />
             </AnexoIcon>
           </FlexItems>
         </Box>
-        {anexos[1] ? <Text>{anexos[1]}</Text> : <></>}
+        {/* {anexos[1] ? <Text>{anexos[1].anexo}</Text> : <></>} */}
       </ContainerBox>
-      <Button title="Anexar" onPress={() => console.log({[route.params.typeAnexo]: anexos})}/>
+      <Button
+        title="Anexar"
+        onPress={() => goBackAnexo()}
+      />
     </Container>
   );
 }

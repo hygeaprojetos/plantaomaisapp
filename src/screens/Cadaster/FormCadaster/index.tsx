@@ -25,6 +25,7 @@ import { StackParamsList } from "../../../routes/auth.routes";
 import { PickerEspecialidades } from "../FormPreCadaster/Components/Especialidade";
 import { PickerLocalidades } from "../FormPreCadaster/Components/Localidade";
 import { PickerSexo } from "../../../components/Picker/Sexo";
+import { PickerEstadoCivil } from "../../../components/Picker/EstadoCivil";
 import { estados } from "../../../utils/estados";
 
 type RouteDetailParams = {
@@ -46,6 +47,13 @@ type RouteDetailParams = {
 export type SelectedProps = {
   estadocrm: string;
 };
+export type SelectEstadoCivilProps = {
+  solteiro: string;
+  casado: string;
+  separado: string;
+  divorciado: string;
+  viúvo: string;
+};
 export type SelectSexoProps = {
   masculino: string;
   feminino: string;
@@ -56,7 +64,7 @@ export type SelectedEstadosProps = {
 export type SelectedEspecProps = {
   nome: [] | string;
 };
-interface Especialidade {
+interface EspecialidadeProps {
   id: string;
   nome: string;
 }
@@ -64,7 +72,7 @@ interface Especialidade {
 export type DoctorRouteProp = RouteProp<RouteDetailParams, "FormCadaster">;
 
 export function FormCadaster() {
-  const { signUp } = useContext(AuthContext);
+  const { navegarForm, etapaCadastro } = useContext(AuthContext);
 
   const navigation =
     useNavigation<NativeStackNavigationProp<StackParamsList>>();
@@ -79,8 +87,7 @@ export function FormCadaster() {
   const [numberIndentify, setNumberIndentify] = useState(preCadastro.cpf);
   const [date, setDate] = useState("");
   const [naturalidade, setNaturalidade] = useState("");
-  const [estadoCivil, setEstadoCivil] = useState("");
-  const [sexo, setSexo] = useState("");
+  const [funcionarioPublico, setFuncionarioPublico] = useState("");
   const [cep, setCep] = useState("");
   const [endereco, setEndereco] = useState("");
   const [number, setNumber] = useState("");
@@ -89,7 +96,6 @@ export function FormCadaster() {
   const [numberCrm, setNumberCrm] = useState(preCadastro.crms?.[0].numero);
   const [emissaoCrm, setEmissaoCrm] = useState(preCadastro.crms?.[0].emissao);
   const [cnes, setCnes] = useState("");
-  const [curso, setCurso] = useState("");
   const [location, setLocation] = useState("");
 
   const [localidadeVisible, setLocalidadeVisible] = useState(false);
@@ -97,14 +103,22 @@ export function FormCadaster() {
     SelectedProps | undefined
   >();
 
+  const [estadoVisible, setEstadoVisible] = useState(false);
+  const [estadoSelect, setEstadoSelect] = useState<SelectedProps | undefined>();
+
   const [especialidadesVisible, setEspecialidadesVisible] = useState(false);
   const [especialidadeSelect, setEspecialidadeSelect] = useState<
     SelectedEspecProps | undefined
   >();
-  const [especialidades, setEspecialidades] = useState<Especialidade[]>([]);
+  const [especialidades, setEspecialidades] = useState<EspecialidadeProps[]>([]);
 
   const [sexoVisible, setSexoVisible] = useState(false);
   const [sexoSelect, setSexoSelect] = useState<SelectSexoProps | undefined>();
+
+  const [civilVisible, setcivilVisible] = useState(false);
+  const [civilSelect, setcivilSelect] = useState<
+    SelectEstadoCivilProps | undefined
+  >();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -120,7 +134,7 @@ export function FormCadaster() {
           }),
         });
         const data = await response.json();
-        const especialidadesData = data.response[0] as Especialidade[];
+        const especialidadesData = data.response[0] as EspecialidadeProps[];
 
         setEspecialidades(data);
         setEspecialidades(especialidadesData);
@@ -132,37 +146,10 @@ export function FormCadaster() {
     fetchData();
   }, []);
 
-  async function alterarFormDoutor(dados) {
-    console.log("{DADOS}", dados);
-    const host = "http://10.0.12.10:3001";
-    try {
-      const tokenUser = await AsyncStorage.getItem("tokenPL");
-
-      const response = await fetch(`${host}/doctor/edit`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: tokenUser,
-        },
-        body: JSON.stringify(dados),
-      });
-
-      //console.log(response)
-      if (!response) {
-        throw new Error("Ocorreu um erro ao atualizar os dados");
-      }
-
-      const responseData = await response.json();
-      console.log("Dados atualizados com sucesso:", responseData);
-    } catch (error) {
-      console.error(
-        "Ocorreu um erro ao atualizar os dados:",
-        JSON.stringify(error)
-      );
-    }
-  }
-
-  const localidade: SelectedProps[] = estados.map((estado) => ({
+  const estadoCrmLocal: SelectedProps[] = estados.map((estado) => ({
+    estadocrm: estado.sigla,
+  }));
+  const estado: SelectedProps[] = estados.map((estado) => ({
     estadocrm: estado.sigla,
   }));
 
@@ -172,10 +159,26 @@ export function FormCadaster() {
   };
 
   const listarSexo = () => {
-    return Object.values(sexoList).map((sexo) => sexo);
+    return Object.values(sexoList);
   };
 
+  console.log("{etapa}", etapaCadastro)
+
   const listaSexo = listarSexo();
+
+  const estadoCivilList = {
+    solteiro: "Solteiro",
+    casado: "Casado",
+    separado: "Separado",
+    divorciado: "Divorciado",
+    viúvo: "Viúvo",
+  };
+
+  const listarEstadoCivil = () => {
+    return Object.values(estadoCivilList);
+  };
+
+  const listaEstadoCivil = listarEstadoCivil();
 
   const dadosAtualizados = {
     nome: preCadastro.nome,
@@ -183,18 +186,23 @@ export function FormCadaster() {
     email: preCadastro.email,
     dataNascimento: date,
     cpf: preCadastro.cpf,
+    estado: estadoSelect,
     sexo: sexoSelect,
     endereco: endereco,
+    estadoCivil: civilSelect,
     numero: number,
     cep: cep,
     complemento: "Novo Complemento",
-    estado: state,
     especialidade: especialidadeSelect,
     cidade: city,
     numeroCrm: preCadastro.crms?.[0].numero,
     estadoCrm: localidadeSelect,
     emissorCrm: preCadastro.crms?.[0].emissao,
   };
+
+  const nomesEspecialidades: any = Array.isArray(especialidades)
+    ? especialidades.map((especialidade) => especialidade.nome)
+    : [];
 
   function handleEspecialidades(item: SelectedEspecProps) {
     setEspecialidadeSelect(item);
@@ -204,16 +212,19 @@ export function FormCadaster() {
     setEspecialidadesVisible(true);
   }
 
-  const nomesEspecialidades: any = Array.isArray(especialidades)
-    ? especialidades.map((especialidade) => especialidade.nome)
-    : [];
-
   function handleLocalidades(item: SelectedProps) {
     setlocalidadeSelect(item);
     setLocalidadeVisible(false);
   }
   function openLocalidade() {
     setLocalidadeVisible(true);
+  }
+  function handleEstado(item: SelectedProps) {
+    setEstadoSelect(item);
+    setEstadoVisible(false);
+  }
+  function openModalEstado() {
+    setEstadoVisible(true);
   }
 
   function handleSexo(item: SelectSexoProps) {
@@ -222,6 +233,13 @@ export function FormCadaster() {
   }
   function openModalSexo() {
     setSexoVisible(true);
+  }
+  function handleEstadoCivil(item: SelectEstadoCivilProps) {
+    setcivilSelect(item);
+    setcivilVisible(false);
+  }
+  function openModalEstadoCivil() {
+    setcivilVisible(true);
   }
 
   return (
@@ -284,16 +302,15 @@ export function FormCadaster() {
           />
           <InputSelected
             title="Estado civil*"
-            textSelect="Selecione seu estado civil"
+            textSelect={
+              civilSelect ? civilSelect : "Selecione seu estado Civil"
+            }
+            onPress={() => openModalEstadoCivil()}
           />
           <InputSelected
             onPress={() => openModalSexo()}
             title="Sexo*"
-            textSelect={
-              sexoSelect
-                ? sexoSelect
-                : 'Selecione o sexo'
-            }
+            textSelect={sexoSelect ? sexoSelect : "Selecione o sexo"}
           />
 
           <InputCadaster
@@ -314,7 +331,13 @@ export function FormCadaster() {
             title="Número*"
             placeholder="Endereço"
           />
-          <InputSelected title="Estado*" textSelect="Estado" />
+
+          <InputSelected
+            title="Estado*"
+            onPress={() => openModalEstado()}
+            textSelect={estadoSelect ? estadoSelect.estadocrm : "Estado"}
+          />
+
           <InputCadaster
             value={city}
             onChangeText={setCity}
@@ -357,10 +380,12 @@ export function FormCadaster() {
                 : "Selecione a especialidade"
             }
           />
-          <InputSelected title="Curso*" textSelect="Selecione o curso" />
-          <InputSelected
+          {/* <InputSelected title="Curso*" textSelect="Selecione o curso" /> */}
+          <InputCadaster
             title="É funcionário público concursado?*"
-            textSelect="Selecione"
+            placeholder="É funcionário público concursado?"
+            value={funcionarioPublico}
+            onChangeText={setFuncionarioPublico}
           />
           <InputCadaster
             value={location}
@@ -371,7 +396,8 @@ export function FormCadaster() {
 
           <Button
             title="Avançar"
-            onPress={() => alterarFormDoutor(dadosAtualizados)}
+            //onPress={() => alterarFormDoutor(dadosAtualizados)}
+            onPress={() => navigation.navigate("CheckListMessage")}
           />
 
           <Modal
@@ -392,8 +418,19 @@ export function FormCadaster() {
           >
             <PickerLocalidades
               onClosed={() => setLocalidadeVisible(false)}
-              options={localidade}
+              options={estadoCrmLocal}
               selectedItem={handleLocalidades}
+            />
+          </Modal>
+          <Modal
+            transparent={true}
+            visible={estadoVisible}
+            animationType="slide"
+          >
+            <PickerLocalidades
+              onClosed={() => setEstadoVisible(false)}
+              options={estado}
+              selectedItem={handleEstado}
             />
           </Modal>
           <Modal transparent={true} visible={sexoVisible} animationType="slide">
@@ -401,6 +438,17 @@ export function FormCadaster() {
               onClosed={() => setSexoVisible(false)}
               options={listaSexo}
               selectedItem={handleSexo}
+            />
+          </Modal>
+          <Modal
+            transparent={true}
+            visible={civilVisible}
+            animationType="slide"
+          >
+            <PickerEstadoCivil
+              onClosed={() => setcivilVisible(false)}
+              options={listaEstadoCivil}
+              selectedItem={handleEstadoCivil}
             />
           </Modal>
         </ContainerFormInput>

@@ -42,7 +42,7 @@ export function VerificationCode() {
   const route = useRoute<DoctorRouteProp>();
   const preCadastro = route.params;
 
-  console.log("[EMAIL] =>", preCadastro);
+  ///console.log("[EMAIL] =>", preCadastro);
 
   const [inputs, setInputs] = useState({
     code1: "",

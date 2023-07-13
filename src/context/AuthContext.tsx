@@ -1,4 +1,4 @@
-import React, { useState, createContext, ReactNode } from "react";
+import React, { useState, createContext, ReactNode, useEffect } from "react";
 import { api } from "../services/api";
 
 import { useNavigation } from "@react-navigation/native";
@@ -9,10 +9,13 @@ type AuthContextData = {
   isAuthenticated: boolean;
   signIn: (credentials: SignInProps) => Promise<void>;
   signUp: (credentials: SignUpProps) => Promise<void>;
+  updateForm: () => Promise<void>;
+  atualizarAnexos: (name: string, value: object) => Promise<void>;
+  navegarForm: (newObject) => Promise<void>;
+  etapaCadastro: {};
 };
 
 type UserProps = {
-  response: {
     user: {
       id: string;
       name: string;
@@ -20,7 +23,6 @@ type UserProps = {
       email: string;
     };
     token: string;
-  };
 };
 
 type ProviderProps = {
@@ -39,6 +41,7 @@ type CrmsProps = {
 };
 
 type SignUpProps = {
+  id: string;
   nome: string;
   email: string;
   senha: string;
@@ -48,13 +51,49 @@ type SignUpProps = {
   crms: CrmsProps[];
 };
 
+export type UpdateProps = {
+  id: string;
+  nome: string;
+  telefone: string;
+  email: string;
+  crms: CrmsProps[];
+  dataNascimento: string;
+  sexo: string;
+  endereco: string;
+  numero: string;
+  cep: string;
+  complemento: string;
+  estado: string;
+  cidade: string;
+  status: string;
+  rg: string;
+  cpf: string;
+  estadoCivil: string;
+  anexoDiplomaDeclaracao: string;
+  anexoProtocolo: [];
+  anexoCpf: [];
+  anexoComprovanteEndereco: [];
+  anexoCertidaoCasamento: [];
+  anexoCnpjEmpresa: [];
+  anexoDocumentosAdicicionais: [];
+  anexoProtocoloAdicional: [];
+  anexoRpaAlvara: [];
+  anexoCrmDefinitivo: [];
+  anexoRg: [];
+  anexoCnh: [];
+  anexoCertidaoRqe: [];
+  anexoContratoSocialConsolidado: [];
+  anexoCertidaoSimplificadaJuntaComercial: [];
+  anexoCrmAdicional: [];
+  anexoFotoMedico: [];
+};
+
 export const AuthContext = createContext({} as AuthContextData);
 
 export function AuthProvider({ children }: ProviderProps) {
   const navigation = useNavigation();
 
   const [user, setUser] = useState<UserProps>({
-    response: {
       user: {
         id: "",
         name: "",
@@ -62,12 +101,21 @@ export function AuthProvider({ children }: ProviderProps) {
         email: "",
       },
       token: "",
-    },
   });
+
+  const [etapaCadastro, setEtapaCadastro] = useState({});
 
   const [loadingAuth, setLoadingAuth] = useState(false);
 
-  const isAuthenticated = !!user.response.user.name;
+  const isAuthenticated = !!user.user.name;
+
+  useEffect(() => {
+    async function getUser() {
+      //dados do usuario....
+      const userInfo = AsyncStorage.getItem("tokenPL");
+    }
+    getUser();
+  }, []);
 
   async function signIn({ email, password }: SignInProps) {
     setLoadingAuth(true);
@@ -79,7 +127,7 @@ export function AuthProvider({ children }: ProviderProps) {
         email,
         password,
       });
-      console.log("{REPSONSE}", response.data);
+      setUser(response.data)
     } catch (error) {
       console.error("erro ao logar", JSON.stringify(error));
       setLoadingAuth(false);
@@ -96,22 +144,77 @@ export function AuthProvider({ children }: ProviderProps) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({...data, web: false}),
+        body: JSON.stringify({ ...data, web: false }),
       });
+      console.log('data[>]',data)
       const responseData = await response.json();
-      console.log("{sasasa}", responseData.response.token)
-      await AsyncStorage.setItem('tokenPL', responseData.response.token)
-      console.log("SUCESSO", responseData);
-      
+      await AsyncStorage.setItem("tokenPL", responseData.response.token);
+      //console.log("SUCESSO", responseData);
     } catch (error) {
-
       console.log("erro ao cadastrar", error);
       throw error;
     }
   }
 
+  async function atualizarAnexos(name, value) {
+    setEtapaCadastro({
+      ...etapaCadastro,
+      [name]: value,
+    });
+  }
+
+  async function navegarForm(newObject) {
+    setEtapaCadastro({
+      ...etapaCadastro,
+      ...newObject,
+    });
+  }
+
+  async function updateForm() {
+    //console.log("{DADOS}", dados);
+    const host = "http://10.0.12.10:3001";
+    try {
+      const tokenUser = await AsyncStorage.getItem("tokenPL");
+
+      const response = await fetch(`${host}/doctor/edit`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: tokenUser,
+        },
+        body: JSON.stringify({...etapaCadastro, id: user.user.id}),
+      });
+
+      //console.log(response)
+      if (!response) {
+        throw new Error("Ocorreu um erro ao atualizar os dados");
+      }
+
+      const responseData = await response.json();
+      console.log("Dados atualizados com sucesso:", responseData.id);
+    } catch (error) {
+      console.error(
+        "Ocorreu um erro ao atualizar os dados:",
+        JSON.stringify(error)
+      );
+    }
+  }
+
+  console.log('LOGAR => ',etapaCadastro)
+
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated, signIn, signUp }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated,
+        signIn,
+        signUp,
+        updateForm,
+        atualizarAnexos,
+        etapaCadastro,
+        navegarForm
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

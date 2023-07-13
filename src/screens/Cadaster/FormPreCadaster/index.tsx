@@ -131,7 +131,7 @@ export function FormPreCadaster() {
     const _OBJECT: any = {
       nome: name,
       email: email,
-      senha: senha.replace(" ", ""),
+      senha: senha,
       telefone: phone,
       cpf: numberIndentify,
       especialidade: especialidadeSelect,
@@ -144,7 +144,6 @@ export function FormPreCadaster() {
         },
       ],
     };
-
     if (senha.replace(" ", "") != confirmSenha.replace(" ", "")) {
       alert("As senhas não são iguais");
     } else {
@@ -186,24 +185,28 @@ export function FormPreCadaster() {
             onChangeText={setSenha}
             title="Senha*"
             placeholder="************"
+            secureTextEntry={true}
           />
           <InputCadaster
             value={confirmSenha}
             onChangeText={setConfirmSenha}
             title="Confirmar senha*"
             placeholder="************"
+            secureTextEntry={true}
           />
           <InputCadaster
             value={phone}
             onChangeText={setPhone}
             title="Telefone*"
             placeholder="(00) 0 0000-0000"
+            maxLength={10}
           />
           <InputCadaster
             value={numberIndentify}
             onChangeText={setNumberIndentify}
             title="Número de identificação*"
             placeholder="Digite seu CPF"
+            maxLength={11}
           />
           <InputCadaster
             value={numberCrm}

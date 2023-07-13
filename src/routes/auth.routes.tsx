@@ -18,11 +18,6 @@ import { Attachments } from "../screens/Cadaster/Attachments";
 import { CheckListDocument } from "../screens/Cadaster/CheckListDocument";
 import { AttachmentsDoctor } from "../screens/Cadaster/AttachmentsDoctor";
 import { AttachmentsCadaster } from "../screens/Cadaster/AttachmentsCadaster";
-import { Dashboard } from "../screens/dashboard";
-import { Solicitacoes } from "../screens/Solicitacoes";
-import { SolicitacoesForm } from "../screens/SolicitacoesForm";
-import { SolicitacoesList } from "../screens/SolicitacoesList";
-import { Solicitacao } from "../screens/solicitacao";
 
 export type StackParamsList = {
   Login: undefined;
@@ -42,6 +37,7 @@ export type StackParamsList = {
     numeroCrm: string;
   };
   FormPreCadaster: {
+    id: string;
     nameDoctor: string;
     email: string;
     senha: string;
@@ -51,17 +47,15 @@ export type StackParamsList = {
     especialidade: string;
   };
   Dashboard: {};
-  Solicitacoes: {
-    
-  };
+  Solicitacoes: {};
   SolicitacoesForm: {
     type: string;
   };
   Solicitacao: {
     id: string;
-  }
+  };
   SolicitacoesList: {};
-  VerificationCode:{};
+  VerificationCode: {};
   CameraPhoto: undefined;
   CheckListMessage: undefined;
   PaymentLink: undefined;
@@ -77,7 +71,7 @@ const Auth = createNativeStackNavigator<StackParamsList>();
 export function AuthRoutes() {
   return (
     <Auth.Navigator>
-      <Auth.Screen
+       <Auth.Screen
         options={{ headerShown: false }}
         name="Login"
         component={Login}
@@ -116,7 +110,7 @@ export function AuthRoutes() {
         options={{ headerShown: false }}
         name="VerificationCode"
         component={VerificationCode}
-      />
+      /> 
       <Auth.Screen
         options={{ headerShown: false }}
         name="FormCadaster"
@@ -157,32 +151,8 @@ export function AuthRoutes() {
         options={{ headerShown: false }}
         name="InternalLink"
         component={InternalLink}
-      />
-      <Auth.Screen
-        options={{ headerShown: false }}
-        name="Dashboard"
-        component={Dashboard}
-      />
-      <Auth.Screen
-        options={{ headerShown: false }}
-        name="Solicitacoes"
-        component={Solicitacoes}
-      />
-      <Auth.Screen
-        options={{ headerShown: false }}
-        name="SolicitacoesForm"
-        component={SolicitacoesForm}
-      />
-      <Auth.Screen
-        options={{ headerShown: false }}
-        name="SolicitacoesList"
-        component={SolicitacoesList}
-      />
-      <Auth.Screen
-        options={{ headerShown: false }}
-        name="Solicitacao"
-        component={Solicitacao}
-      />
+      /> 
+      
     </Auth.Navigator>
   );
 }

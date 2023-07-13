@@ -12,17 +12,44 @@ import {
   ContainerListener,
 } from "./styles";
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation,RouteProp, useRoute } from "@react-navigation/native";
 import { FlatList } from "react-native";
 
 import { ListDocuments } from "../../../components/ComponentList/List-Document";
 import { SeparatorItem } from "./Components/Separator";
 import { Button } from "../../../components/Button";
 
+type RouteDetailParams = {
+  CheckListDocument: {
+    nome: string;
+    telefone: string;
+    email: string;
+    dataNascimento: string;
+    cpf: string;
+    estado: string;
+    sexo: string;
+    endereco: string;
+    estadoCivil: string;
+    numero: string;
+    cep: string;
+    complemento: string;
+    especialidade: string;
+    cidade: string;
+    numeroCrm: string;
+    estadoCrm: string;
+    emissorCrm: string;
+  };
+};
+
+export type DoctorRouteProp = RouteProp<RouteDetailParams, "CheckListDocument">;
+
 export function CheckListDocument() {
   const navigation = useNavigation();
 
-  const [list, setList] = useState(10);
+  const route = useRoute<DoctorRouteProp>();
+  const preCadastro = route.params;
+
+  console.log("{CHEGOU AQUI}", preCadastro)
 
   return (
     <Container>
@@ -67,7 +94,7 @@ export function CheckListDocument() {
         <ListDocuments title="Anexo RPA-Alvará"/>
         <ListDocuments title="Anexo Documento adicional"/>
 
-        <Button onPress={() => navigation.navigate("AttachmentsCadaster")} title="Finalizar cadastro"/>
+        <Button onPress={() => navigation.navigate("AttachmentsCadaster", preCadastro)} title="Finalizar cadastro"/>
       </ContainerListener>
 
     </Container>

@@ -5,11 +5,38 @@ import { Container, BoxTitle, Title, SubTitle, Description } from "./styles";
 import { Button } from "../../components/Button";
 import { ContainerButton } from "../Cadaster/CaptureName/styles";
 
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation,RouteProp, useRoute } from "@react-navigation/native";
+
+type RouteDetailParams = {
+  AttachmentsCadaster: {
+    nome: string;
+    telefone: string;
+    email: string;
+    dataNascimento: string;
+    cpf: string;
+    estado: string;
+    sexo: string;
+    endereco: string;
+    estadoCivil: string;
+    numero: string;
+    cep: string;
+    complemento: string;
+    especialidade: string;
+    cidade: string;
+    numeroCrm: string;
+    estadoCrm: string;
+    emissorCrm: string;
+  };
+};
+
+export type DoctorRouteProp = RouteProp<RouteDetailParams, "AttachmentsCadaster">;
 
 export function CheckListMessage() {
 
   const navigation = useNavigation()
+
+  const route = useRoute<DoctorRouteProp>();
+  const preCadastro = route.params;
 
   return (
     <Container>
@@ -28,7 +55,7 @@ export function CheckListMessage() {
       </BoxTitle>
 
       <ContainerButton>
-        <Button onPress={() => navigation.navigate("CheckListDocument")} colorBackground="white" title="Vamos lá" />
+        <Button onPress={() => navigation.navigate("CheckListDocument", preCadastro)} colorBackground="white" title="Vamos lá" />
       </ContainerButton>
     </Container>
   );
